@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>jQuery Exercises</title>
+    <!-- Exercise 1: CDN Inclusion -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <style>
+        .box { width: 100px; height: 100px; background-color: blue; margin: 10px; display: inline-block; }
+        #colorBox { width: 150px; height: 150px; background-color: white; border: 2px solid black; }
+    </style>
+</head>
+<body>
+    <!-- Exercise 2: Selecting Elements -->
+    <h1 id="mainTitle">Original Title</h1>
+    <p class="text-para">This is paragraph 1.</p>
+    <p class="text-para">This is paragraph 2.</p>
+    <button id="hideParaBtn">Hide a Paragraph</button>
+    <hr>
+
+    <!-- Exercise 3: Common Methods -->
+    <div class="box" id="box1"></div>
+    <div class="box" id="box2"></div>
+    <div class="box" id="box3"></div><br>
+    <button id="fadeBtn">Fade Out Box 1</button>
+    <button id="toggleBtn">Toggle Box 2</button>
+    <button id="chainBtn">Chain Animation Box 3</button>
+    <hr>
+
+    <!-- Exercise 4: DOM Manipulation -->
+    <input type="text" id="itemInput" placeholder="Add an item">
+    <button id="addBtn">Add to List</button>
+    <button id="removeAllBtn">Remove All</button>
+    <ul id="itemList"></ul>
+    <hr>
+
+    <!-- Exercise 5 & 6: Events -->
+    <div id="colorBox">Hover or Click Me!</div>
+    <button id="colorBtn">Change Box Color</button>
+    <br><br>
+    <input type="text" id="keyInput" placeholder="Type here...">
+
+    <script>
+        $(document).ready(function() {
+            // Exercise 1 Bonus
+            console.log("Hello World!");
+
+            // Exercise 2
+            $("#mainTitle").text("Title Changed by jQuery!");
+            $("#hideParaBtn").click(function() {
+                $(".text-para").first().hide();
+            });
+
+            // Exercise 3
+            $("#fadeBtn").click(function() { $("#box1").fadeOut(); });
+            $("#toggleBtn").click(function() { $("#box2").toggle(); });
+            $("#chainBtn").click(function() { $("#box3").slideUp().delay(1000).slideDown(); });
+
+            // Exercise 4
+            $("#addBtn").click(function() {
+                let val = $("#itemInput").val();
+                if(val) {
+                    $("#itemList").append("<li>" + val + "</li>");
+                    $("#itemInput").val("");
+                }
+            });
+            $("#removeAllBtn").click(function() {
+                $("#itemList").empty();
+            });
+
+            // Exercise 5
+            $("#colorBtn").click(function() {
+                $("#colorBox").css("background-color", "red");
+            });
+            $("#colorBtn").dblclick(function() {
+                $("#colorBox").css("background-color", "white");
+            });
+
+            // Exercise 6
+            $("#colorBox").mouseenter(function() {
+                $(this).css("border-color", "green");
+            }).mouseleave(function() {
+                $(this).css("border-color", "black");
+            });
+
+            $("#keyInput").keypress(function() {
+                $(this).css("background-color", "yellow");
+            });
+        });
+    </script>
+</body>
+</html>

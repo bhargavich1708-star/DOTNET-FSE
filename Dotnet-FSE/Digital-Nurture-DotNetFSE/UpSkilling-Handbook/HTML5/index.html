@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Community Event Portal</title>
+    <style>
+        /* Internal CSS for Welcome Banner and Gallery */
+        #welcomeBanner { background-color: #e0f7fa; padding: 15px; text-align: center; }
+        .highlight { border: 2px solid #0277bd; border-radius: 5px; padding: 5px; }
+        .gallery-img { border: 2px solid #ccc; width: 200px; height: auto; }
+        nav { background-color: #333; padding: 10px; }
+        nav a { color: white; margin-right: 15px; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#events">Events</a>
+        <a href="#contact">Contact</a>
+        <a href="help.html" target="_blank">Help</a>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <section id="home">
+            <div id="welcomeBanner">
+                <h2>Welcome to the Community Portal!</h2>
+                <p>Register today and get a <span style="color: red; font-weight: bold;">Free Swag Bag</span> at your first event.</p>
+            </div>
+            
+            <button onclick="findNearbyEvents()">Find Nearby Events</button>
+            <p id="geoOutput"></p>
+        </section>
+
+        <section id="events">
+            <h3>Past Event Gallery</h3>
+            <table>
+                <tr>
+                    <td>
+                        <img src="event1.jpg" alt="Marathon" title="City Marathon" class="gallery-img highlight" ondblclick="this.style.width='400px'">
+                        <br><caption>2024 City Marathon</caption>
+                    </td>
+                    <td>
+                        <img src="event2.jpg" alt="Bake Sale" title="Community Bake Sale" class="gallery-img highlight">
+                        <br><caption>Spring Bake Sale</caption>
+                    </td>
+                    <td>
+                        <img src="event3.jpg" alt="Cleanup" title="Park Cleanup" class="gallery-img highlight">
+                        <br><caption>Park Cleanup Drive</caption>
+                    </td>
+                </tr>
+            </table>
+
+            <h3>Promo Video</h3>
+            <video width="320" height="240" controls oncanplay="alert('Video ready to play')">
+                <source src="promo.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </section>
+
+        <section id="contact">
+            <h3>Event Registration</h3>
+            <form onsubmit="showConfirmation(event)">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required autofocus><br><br>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required><br><br>
+
+                <label for="phone">Phone:</label>
+                <input type="tel" id="phone" onblur="validatePhone()"><br><br>
+
+                <label for="date">Event Date:</label>
+                <input type="date" id="date" name="date" required><br><br>
+
+                <label for="eventType">Event Type:</label>
+                <select id="eventType" name="eventType" onchange="displayFee()">
+                    <option value="free">Free Community Event</option>
+                    <option value="paid">Paid Workshop ($20)</option>
+                </select>
+                <p id="feeOutput"></p>
+
+                <label for="message">Message:</label><br>
+                <textarea id="message" name="message" rows="4" cols="50" onkeyup="countChars()"></textarea>
+                <p>Characters: <span id="charCount">0</span></p>
+
+                <button type="submit">Register</button>
+                <button type="button" onclick="clearPreferences()">Clear Preferences</button>
+                <output id="formOutput"></output>
+            </form>
+        </section>
+    </main>
+
+    <script>
+        // JS for HTML5 Events and Local Storage
+        document.addEventListener("DOMContentLoaded", () => {
+            const savedType = localStorage.getItem("preferredEventType");
+            if (savedType) document.getElementById("eventType").value = savedType;
+        });
+
+        function validatePhone() {
+            const phone = document.getElementById("phone").value;
+            if (phone.length < 10) alert("Please enter a valid phone number.");
+        }
+
+        function displayFee() {
+            const type = document.getElementById("eventType").value;
+            localStorage.setItem("preferredEventType", type);
+            document.getElementById("feeOutput").innerText = type === 'paid' ? "Fee: $20" : "Fee: $0";
+        }
+
+        function countChars() {
+            const length = document.getElementById("message").value.length;
+            document.getElementById("charCount").innerText = length;
+        }
+
+        function showConfirmation(e) {
+            e.preventDefault();
+            document.getElementById("formOutput").innerText = "Registration Successful!";
+        }
+
+        function clearPreferences() {
+            localStorage.clear();
+            sessionStorage.clear();
+            alert("Preferences cleared.");
+        }
+
+        function findNearbyEvents() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        document.getElementById("geoOutput").innerText = 
+                            `Coordinates: ${position.coords.latitude}, ${position.coords.longitude}`;
+                    },
+                    (error) => { alert("Geolocation denied or failed."); },
+                    { enableHighAccuracy: true, timeout: 5000 }
+                );
+            }
+        }
+
+        window.onbeforeunload = function() {
+            if (document.getElementById("name").value !== "") {
+                return "You have unsaved changes. Are you sure you want to leave?";
+            }
+        };
+    </script>
+</body>
+</html>

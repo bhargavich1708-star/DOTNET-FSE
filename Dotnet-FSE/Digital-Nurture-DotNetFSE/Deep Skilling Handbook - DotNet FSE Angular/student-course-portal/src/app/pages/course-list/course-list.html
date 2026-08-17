@@ -1,0 +1,26 @@
+<h2>Available Courses</h2>
+
+<!-- Show when isLoading is true[cite: 15] -->
+<p *ngIf="isLoading">Loading courses...</p>
+
+<!-- Show when isLoading is false -->
+<div *ngIf="!isLoading">
+  
+  <!-- Use *ngIf with an else block[cite: 15] -->
+  <ng-container *ngIf="courses.length > 0; else noCourses">
+    <!-- Implemented trackBy[cite: 15] -->
+    <app-course-card 
+      *ngFor="let c of courses; trackBy: trackByCourseId" 
+      [course]="c" 
+      (enrollRequested)="onEnroll($event)">
+    </app-course-card>
+  </ng-container>
+
+</div>
+
+<!-- Fallback template when courses array is empty[cite: 15] -->
+<ng-template #noCourses>
+  <p>No courses available.</p>
+</ng-template>
+
+<p *ngIf="selectedCourseId">Selected course ID: {{ selectedCourseId }}</p>

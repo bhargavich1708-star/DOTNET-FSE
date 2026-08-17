@@ -1,0 +1,24 @@
+<!-- Attribute Directive: ngClass applies dynamic CSS classes -->
+<div class="card" [ngClass]="{
+  'border-green': course.gradeStatus === 'passed',
+  'border-red': course.gradeStatus === 'failed',
+  'border-gray': course.gradeStatus === 'pending'
+}">
+  
+  <!-- Built-in Pipe: uppercase | Custom Pipe: formatCode -->
+  <h3>{{ course.name | uppercase }} ({{ course.code | formatCode }})</h3>
+  
+  <p>Credits: {{ course.credits }}</p>
+  
+  <!-- Built-in Pipes: currency and date -->
+  <p>Price: {{ course.price | currency:'USD' }}</p>
+  <p>Starts: {{ course.startDate | date:'mediumDate' }}</p>
+
+  <div [ngSwitch]="course.gradeStatus">
+    <p *ngSwitchCase="'passed'" style="color: green;">Status: Passed</p>
+    <p *ngSwitchCase="'failed'" style="color: red;">Status: Failed</p>
+    <p *ngSwitchCase="'pending'" style="color: gray;">Status: Pending</p>
+  </div>
+
+  <button (click)="enrollRequested.emit(course.id)">Enroll</button>
+</div>
